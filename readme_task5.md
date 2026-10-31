@@ -59,7 +59,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.20.0.0/24
 
 volumes:
   db_data:
@@ -94,19 +94,24 @@ docker compose up -d --build
 ## Задача 5 (*)
 *Задача со звездочкой не выполнялась.*
 
-## Задача 6
+## Задача 6 (Доработка)
 ```bash
 sudo docker pull hashicorp/terraform:latest
 sudo docker save hashicorp/terraform:latest -o terraform.tar
 dive hashicorp/terraform:latest
 
-# Извлечение и проверка бинарника
-sudo docker create --name tf_temp hashicorp/terraform:latest
-sudo docker cp tf_temp:/bin/terraform ./terraform
-sudo docker rm tf_temp
-chmod +x ./terraform
-./terraform version
+# Извлечение слоя из архива и проверка бинарника
+sudo chown $USER:$USER terraform.tar
+mkdir terraform_ext
+tar -xf terraform.tar -C terraform_ext
+cd terraform_ext
+gunzip -c blobs/sha256/8849370588e7f05c63a1a5b4cbaa50170be2876b00f7da05a6b9d17fe3d4f654 > ~/terraform
+tar -xf ~/terraform
+chmod +x bin/terraform
+./bin/terraform version
 ```
-<img width="974" height="634" alt="image" src="https://github.com/user-attachments/assets/e751f468-eb61-4e22-aa18-c14cb193b810" />
-<img width="373" height="122" alt="image" src="https://github.com/user-attachments/assets/7a18e778-cf32-4104-b685-d732643501a7" />
+<img width="974" height="415" alt="image" src="https://github.com/user-attachments/assets/af2ed3ec-03b4-4891-84c0-08b64956ab5b" />
+<img width="974" height="542" alt="image" src="https://github.com/user-attachments/assets/7f1a522e-5516-46ba-badb-7f6ca4f47cd0" />
+<img width="936" height="175" alt="image" src="https://github.com/user-attachments/assets/2a550772-2406-4d78-9c59-7803e0c83a48" />
+
 
